@@ -13,6 +13,7 @@ import numpy as np
 from scipy.misc import imsave
 from skimage.color import label2rgb
 import tqdm
+import six
 
 from fcn import util
 
@@ -77,7 +78,7 @@ class Trainer(object):
         """Iterate with train data."""
         log_templ = ('{i_iter}: type={type}, loss={loss}, acc={acc}, '
                      'acc_cls={acc_cls}, iu={iu}, fwavacc={fwavacc}')
-        for i_iter in xrange(self.max_iter):
+        for i_iter in six.moves.xrange(self.max_iter):
             self.i_iter = i_iter
 
             if (self.test_interval is not None) and \
@@ -113,7 +114,7 @@ class Trainer(object):
         N_data = len(self.dataset.val)
         result = defaultdict(list)
         desc = '{0}: validating'.format(self.i_iter)
-        for indice in tqdm.tqdm(xrange(N_data), ncols=80, desc=desc):
+        for indice in tqdm.tqdm(six.moves.xrange(N_data), ncols=80, desc=desc):
             loss, acc, acc_cls, iu, fwavacc = self._iterate_once(
                 type=type, indices=[indice])
             result['loss'].append(loss)

@@ -4,7 +4,11 @@ from __future__ import division
 from __future__ import print_function
 
 from collections import defaultdict
-import cPickle as pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import glob
 import os.path as osp
 import re

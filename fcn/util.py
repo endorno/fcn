@@ -2,7 +2,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import cStringIO as StringIO
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import io as StringIO
+
+import six
 import hashlib
 import math
 import os
@@ -221,10 +226,10 @@ def bitget(byteval, idx):
 
 def labelcolormap(N=256):
     cmap = np.zeros((N, 3))
-    for i in xrange(0, N):
+    for i in six.moves.xrange(0, N):
         id = i
         r, g, b = 0, 0, 0
-        for j in xrange(0, 8):
+        for j in six.moves.xrange(0, 8):
             r = np.bitwise_or(r, (bitget(id, 0) << 7-j))
             g = np.bitwise_or(g, (bitget(id, 1) << 7-j))
             b = np.bitwise_or(b, (bitget(id, 2) << 7-j))
@@ -239,7 +244,7 @@ def labelcolormap(N=256):
 def visualize_labelcolormap(cmap):
     n_colors = len(cmap)
     ret = np.zeros((n_colors, 10 * 10, 3))
-    for i in xrange(n_colors):
+    for i in six.moves.xrange(n_colors):
         ret[i, ...] = cmap[i]
     return ret.reshape((n_colors * 10, 10, 3))
 
@@ -312,7 +317,7 @@ def draw_label(label, img, n_class, label_titles, bg_label=0):
         plt_titles.append(label_titles[label_value])
     plt.legend(plt_handlers, plt_titles, loc='lower right', framealpha=0.5)
     # convert plotted figure to np.ndarray
-    f = StringIO.StringIO()
+    f = StringIO.BytesIO()
     plt.savefig(f, bbox_inches='tight', pad_inches=0)
     result_img_pil = Image.open(f)
     result_img = fromimage(result_img_pil, mode='RGB')
